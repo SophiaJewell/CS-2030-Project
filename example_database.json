@@ -1,0 +1,24 @@
+{
+    "users": [
+        {
+            "email": "admin@gmail.com",
+            "password": "PUT_HASH_HERE",
+            "role": "admin"
+        },
+        {
+            "email": "student@yahoo.com",
+            "password": "PUT_HASH_HERE",
+            "role": "user"
+        }
+    ],
+    "students": [
+        {
+            "student_id": "700123456",
+            "first_name": "John",
+            "last_name": "Smith",
+            "age": 20,
+            "gender": "Male",
+            "phone": "660-555-1234"
+        }
+    ]
+}
