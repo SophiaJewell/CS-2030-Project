@@ -1,5 +1,15 @@
 {
-    "users": [],
+    "users": [
+        {
+            "email": "test@gmail.com",
+            "password": "dfdebebfc53c6590854f55c9180850d961f8c66c9c6398935b5fe001d13880fe",
+            "role": "user"
+        },
+        {
+            "email": "admin@ucmo.edu",
+            "password": "c15c899d0d564412dda510029d34f7f083d690df65b40d1a1263df9b7512672b",
+            "role": "admin"
+        }
+    ],
     "students": []
 }
-
