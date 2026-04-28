@@ -9,7 +9,56 @@
             "email": "admin@ucmo.edu",
             "password": "c15c899d0d564412dda510029d34f7f083d690df65b40d1a1263df9b7512672b",
             "role": "admin"
+        },
+        {
+            "email": "testing@gmail.com",
+            "password": "dfdebebfc53c6590854f55c9180850d961f8c66c9c6398935b5fe001d13880fe",
+            "role": "user",
+            "student_id": "700123456"
+        },
+        {
+            "email": "Another@gmail.com",
+            "password": "88e793b8ae37396ac7df144abca0a3350afcbc1ea439907670f8d05b1b578e68",
+            "role": "user",
+            "student_id": "700186457"
+        },
+        {
+            "email": "JSmith@ucmo.edu",
+            "password": "c211bfa37b2a652a74e0bcc52e07db2c3b1263b2dc8e1cf6f090796f9a7b8b1a",
+            "role": "user",
+            "student_id": "700123456"
+        },
+        {
+            "email": "NoStudent@gmail.com",
+            "password": "6983b376561e449b4fb00fdca539c9b0348cd4892bc370008e9741b121bcfd80",
+            "role": "user",
+            "student_id": "700999999"
         }
     ],
-    "students": []
+    "students": [
+        {
+            "student_id": "700123456",
+            "first_name": "John",
+            "last_name": "Smith",
+            "age": 20,
+            "gender": "Male",
+            "phone": "123-456-7890"
+        },
+        {
+            "student_id": "700737684",
+            "first_name": "Blake",
+            "last_name": "Carnahan",
+            "age": 22,
+            "gender": "Male",
+            "phone": "417-123-4567"
+        },
+        {
+            "student_id": "700123321",
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "age": 54,
+            "gender": "Female",
+            "phone": "808-298-7615"
+        }
+    ]
 }
