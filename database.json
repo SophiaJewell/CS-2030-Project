@@ -1,26 +1,9 @@
 {
     "users": [
         {
-            "email": "test@gmail.com",
-            "password": "dfdebebfc53c6590854f55c9180850d961f8c66c9c6398935b5fe001d13880fe",
-            "role": "user"
-        },
-        {
             "email": "admin@ucmo.edu",
             "password": "c15c899d0d564412dda510029d34f7f083d690df65b40d1a1263df9b7512672b",
             "role": "admin"
-        },
-        {
-            "email": "testing@gmail.com",
-            "password": "dfdebebfc53c6590854f55c9180850d961f8c66c9c6398935b5fe001d13880fe",
-            "role": "user",
-            "student_id": "700123456"
-        },
-        {
-            "email": "Another@gmail.com",
-            "password": "88e793b8ae37396ac7df144abca0a3350afcbc1ea439907670f8d05b1b578e68",
-            "role": "user",
-            "student_id": "700186457"
         },
         {
             "email": "JSmith@ucmo.edu",
@@ -29,10 +12,10 @@
             "student_id": "700123456"
         },
         {
-            "email": "NoStudent@gmail.com",
-            "password": "6983b376561e449b4fb00fdca539c9b0348cd4892bc370008e9741b121bcfd80",
+            "email": "bdc76840@ucmo.edu",
+            "password": "d17d2d50e91b1b801731a495019f6c885a727c9b05f641e330a22d0a9226954d",
             "role": "user",
-            "student_id": "700999999"
+            "student_id": "700737684"
         }
     ],
     "students": [
@@ -50,7 +33,7 @@
             "last_name": "Carnahan",
             "age": 22,
             "gender": "Male",
-            "phone": "417-123-4567"
+            "phone": "417-123-4565"
         },
         {
             "student_id": "700123321",

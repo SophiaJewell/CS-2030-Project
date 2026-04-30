@@ -57,8 +57,8 @@ class SecureStudentApp:
         # Main window setup
         self.root = tk.Tk()
         self.root.title("Secure Student Management System")
-        self.root.geometry("1000x800")
-        self.root.minsize(750, 750)
+        self.root.geometry("1000x700")
+        self.root.minsize(750, 700)
         self.root.resizable(True, True)
         self.root.configure(bg=BG_COLOR)
 
@@ -67,6 +67,10 @@ class SecureStudentApp:
 
         # Tracks whether dark mode is on or off
         self.dark_mode = False
+
+        # Mule images
+        self.ucm_logo_img = tk.PhotoImage(file="Images/ucm_logo.png")
+        self.mule_img = tk.PhotoImage(file="Images/mule.png")
 
         # Container that holds all screens stacked on top of each other
         container = tk.Frame(self.root, bg=BG_COLOR)
@@ -77,7 +81,7 @@ class SecureStudentApp:
         # Store all screens in a dictionary
         self.frames = {}
         for ScreenClass in (WelcomeFrame, LoginFrame, RegisterFrame, DashboardFrame,
-                            AddStudentFrame, ViewAllStudentsFrame, ViewMyRecordFrame):
+                            AddStudentFrame, ViewAllStudentsFrame, ViewMyRecordFrame, EditStudentFrame):
             frame = ScreenClass(container, self)
             self.frames[ScreenClass] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -195,11 +199,18 @@ class WelcomeFrame(tk.Frame):
         self.build()
 
     def build(self):
+
+        # Ucm Logo label for the bottom center (Extra piece #1)
+        logo = self.app.ucm_logo_img.subsample(2)
+        logo_label = tk.Label(self, image=logo, bg=BG_COLOR)
+        logo_label.image = logo  # Causes image to not disappear
+        logo_label.pack(pady=(40, 10))
+
         # Student Management System Title
         self.title_label = tk.Label(self, text="Student Management System",
                                     bg=BG_COLOR, fg=TITLE_COLOR,
                                     font=FONT_TITLE)
-        self.title_label.pack(pady=(140, 60))
+        self.title_label.pack(pady=(0, 60))
 
         # Register Button
         tk.Button(self, text="Register",
@@ -447,6 +458,12 @@ class RegisterFrame(tk.Frame):
         if not id_ok:
             messagebox.showerror("Error", id_msg)
             return
+
+        # Check if student ID is already linked to another account
+        for user in get_users():
+            if user.get("student_id") == student_id:
+                messagebox.showerror("Error", "That Student ID is already linked to an account.")
+                return
 
         # Validate password
         pw_ok, pw_msg = validate_password(pw)
@@ -797,6 +814,20 @@ class ViewAllStudentsFrame(tk.Frame):
         btn_row = tk.Frame(self, bg=BG_COLOR)
         btn_row.pack(pady=14)
 
+        # Add Student Button
+        tk.Button(btn_row, text="Add Student",
+                  bg=ACCENT, fg=BTN_FG, activebackground=MAIN_BTN_BG_CLICK,
+                  activeforeground=BTN_FG, relief="raised",
+                  font=FONT_NORMAL, width=14, cursor="hand2",
+                  command=self.go_to_add).pack(side="left", padx=8, ipady=6)
+
+        # Edit Student Button
+        tk.Button(btn_row, text="Edit Student",
+                  bg=ACCENT, fg=BTN_FG, activebackground=MAIN_BTN_BG_CLICK,
+                  activeforeground=BTN_FG, relief="raised",
+                  font=FONT_NORMAL, width=16, cursor="hand2",
+                  command=self.edit_student).pack(side="left", padx=8, ipady=6)
+
         # Delete Student Button
         tk.Button(btn_row, text="Delete Student",
                   bg=RED, fg=BTN_FG, activebackground="#C04030",
@@ -862,6 +893,18 @@ class ViewAllStudentsFrame(tk.Frame):
     def go_back(self):
         self.app.show_frame(DashboardFrame)
 
+    def edit_student(self):
+        selected = self.tree.selection()
+        if not selected:
+            messagebox.showerror("Error", "Please select a student to edit.")
+            return
+        student_id = self.tree.item(selected[0], "values")[0]
+        self.app.frames[EditStudentFrame].load_student(student_id)
+        self.app.show_frame(EditStudentFrame)
+
+    def go_to_add(self):
+        self.app.show_frame(AddStudentFrame)
+
     def apply_theme(self, bg, card, text, entry):
         self.configure(bg=bg)
         self.app.apply_colors(self, bg, card, text, entry)
@@ -870,6 +913,161 @@ class ViewAllStudentsFrame(tk.Frame):
                         background=card,
                         foreground=text,
                         fieldbackground=card)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# EditStudentFrame
+
+class EditStudentFrame(tk.Frame):
+
+    def __init__(self, parent, app):
+        super().__init__(parent, bg=BG_COLOR)
+        self.app = app
+        self.student_id = None
+        self.build()
+
+    def build(self):
+        tk.Label(self, text="Edit Student",
+                 bg=BG_COLOR, fg=TITLE_COLOR,
+                 font=FONT_TITLE).pack(pady=(40, 20))
+
+        card = tk.Frame(self, bg=CARD_COLOR, bd=1, relief="groove")
+        card.pack(pady=10, padx=150)
+
+        # First name field
+        tk.Label(card, text="First Name:", bg=CARD_COLOR, fg=TEXT_COLOR,
+                 font=FONT_NORMAL).pack(anchor="w", padx=24, pady=(20, 2))
+        self.first_var = tk.StringVar()
+        tk.Entry(card, textvariable=self.first_var,
+                 bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground="black",
+                 relief="flat", font=FONT_NORMAL, width=32
+                 ).pack(anchor="w", padx=24, pady=(0, 12), ipady=6)
+
+        # Last name field
+        tk.Label(card, text="Last Name:", bg=CARD_COLOR, fg=TEXT_COLOR,
+                 font=FONT_NORMAL).pack(anchor="w", padx=24, pady=(0, 2))
+        self.last_var = tk.StringVar()
+        tk.Entry(card, textvariable=self.last_var,
+                 bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground="black",
+                 relief="flat", font=FONT_NORMAL, width=32
+                 ).pack(anchor="w", padx=24, pady=(0, 12), ipady=6)
+
+        # Age field
+        tk.Label(card, text="Age (16-100):", bg=CARD_COLOR, fg=TEXT_COLOR,
+                 font=FONT_NORMAL).pack(anchor="w", padx=24, pady=(0, 2))
+        self.age_var = tk.StringVar()
+        tk.Entry(card, textvariable=self.age_var,
+                 bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground="black",
+                 relief="flat", font=FONT_NORMAL, width=32
+                 ).pack(anchor="w", padx=24, pady=(0, 12), ipady=6)
+
+        # Gender field
+        tk.Label(card, text="Gender:", bg=CARD_COLOR, fg=TEXT_COLOR,
+                 font=FONT_NORMAL).pack(anchor="w", padx=24, pady=(0, 2))
+        self.gender_var = tk.StringVar(value="Male")
+
+        gender_row = tk.Frame(card, bg=CARD_COLOR)
+        gender_row.pack(anchor="w", padx=24, pady=(0, 12))
+
+        for option in ("Male", "Female", "Other"):
+            tk.Radiobutton(gender_row, text=option, variable=self.gender_var,
+                           value=option, bg=ACCENT, fg=DARK_TEXT,
+                           selectcolor=MAIN_BTN_BG_CLICK, activebackground=CARD_COLOR,
+                           relief="raised",
+                           font=FONT_NORMAL).pack(side="left", padx=8)
+
+        # Phone field
+        tk.Label(card, text="Phone xxx-xxx-xxxx:", bg=CARD_COLOR, fg=TEXT_COLOR,
+                 font=FONT_NORMAL).pack(anchor="w", padx=24, pady=(0, 2))
+        self.phone_var = tk.StringVar()
+        tk.Entry(card, textvariable=self.phone_var,
+                 bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground="black",
+                 relief="flat", font=FONT_NORMAL, width=32
+                 ).pack(anchor="w", padx=24, pady=(0, 12), ipady=6)
+
+        # Buttons
+        btn_row = tk.Frame(card, bg=CARD_COLOR)
+        btn_row.pack(pady=24)
+
+        tk.Button(btn_row, text="Save Changes",
+                  bg=ACCENT, fg=BTN_FG, activebackground=MAIN_BTN_BG_CLICK,
+                  activeforeground=BTN_FG, relief="raised",
+                  font=FONT_HEADER, width=12, cursor="hand2",
+                  command=self.submit).pack(side="left", padx=8, ipady=6)
+
+        tk.Button(btn_row, text="Back",
+                  bg=SEC_BTN_BG, fg=BTN_FG, activebackground=SEC_BTN_BG_CLICK,
+                  activeforeground=BTN_FG, relief="raised",
+                  font=FONT_NORMAL, width=8, cursor="hand2",
+                  command=self.go_back).pack(side="left", padx=8, ipady=10)
+
+    def load_student(self, student_id):
+        # Load the student's current data into the fields
+        self.student_id = student_id
+        student = find_student_by_id(student_id)
+
+        self.first_var.set(student.get("first_name", ""))
+        self.last_var.set(student.get("last_name", ""))
+        self.age_var.set(str(student.get("age", "")))
+        self.gender_var.set(student.get("gender", "Male"))
+        self.phone_var.set(student.get("phone", ""))
+
+        self.app.set_status(f"Editing student {student_id}.")
+
+    def submit(self):
+        first  = self.first_var.get().strip()
+        last   = self.last_var.get().strip()
+        age    = self.age_var.get().strip()
+        gender = self.gender_var.get().strip()
+        phone  = self.phone_var.get().strip()
+
+        # Check if fields are empty
+        if not first or not last or not age or not phone:
+            messagebox.showerror("Error", "All fields are required.")
+            return
+
+        # Validate fields
+        first_ok, first_msg = validate_name(first)
+        if not first_ok:
+            messagebox.showerror("Error", first_msg)
+            return
+
+        last_ok, last_msg = validate_name(last)
+        if not last_ok:
+            messagebox.showerror("Error", last_msg)
+            return
+
+        age_ok, age_msg = validate_age(age)
+        if not age_ok:
+            messagebox.showerror("Error", age_msg)
+            return
+
+        phone_ok, phone_msg = validate_phone(phone)
+        if not phone_ok:
+            messagebox.showerror("Error", phone_msg)
+            return
+
+        # Save the updated student
+        try:
+            update_student(self.student_id, {
+                "first_name": first,
+                "last_name":  last,
+                "age":        int(age),
+                "gender":     gender,
+                "phone":      phone
+            })
+            self.app.set_status(f"Student {self.student_id} updated!", ok=True)
+            messagebox.showinfo("Success", f"Student updated successfully!")
+            self.go_back()
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
+
+    def go_back(self):
+        self.app.show_frame(ViewAllStudentsFrame)
+
+    def apply_theme(self, bg, card, text, entry):
+        self.configure(bg=bg)
+        self.app.apply_colors(self, bg, card, text, entry)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
