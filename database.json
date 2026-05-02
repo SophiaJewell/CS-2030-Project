@@ -16,6 +16,12 @@
             "password": "d17d2d50e91b1b801731a495019f6c885a727c9b05f641e330a22d0a9226954d",
             "role": "user",
             "student_id": "700737684"
+        },
+        {
+            "email": "jack@ucmo.edu",
+            "password": "b8f139c4a63c3026da3f2f2e32fec3f6b888a6b0278473561db2c8dfac8b07fc",
+            "role": "user",
+            "student_id": "700141516"
         }
     ],
     "students": [
@@ -25,7 +31,15 @@
             "last_name": "Smith",
             "age": 20,
             "gender": "Male",
-            "phone": "123-456-7890"
+            "phone": "123-456-7890",
+            "grades": [
+                [
+                    "CS2030",
+                    [
+                        80.0
+                    ]
+                ]
+            ]
         },
         {
             "student_id": "700737684",
@@ -33,7 +47,39 @@
             "last_name": "Carnahan",
             "age": 22,
             "gender": "Male",
-            "phone": "417-123-4565"
+            "phone": "417-123-4565",
+            "grades": [
+                [
+                    "CS4500",
+                    [
+                        21.0,
+                        85.0
+                    ]
+                ],
+                [
+                    "CS2030",
+                    [
+                        100.0,
+                        99.9,
+                        87.0,
+                        94.1,
+                        79.9,
+                        98.2
+                    ]
+                ],
+                [
+                    "CS4710",
+                    [
+                        82.5
+                    ]
+                ],
+                [
+                    "CS1234",
+                    [
+                        12.3
+                    ]
+                ]
+            ]
         },
         {
             "student_id": "700123321",
@@ -42,6 +88,14 @@
             "age": 54,
             "gender": "Female",
             "phone": "808-298-7615"
+        },
+        {
+            "student_id": "700141516",
+            "first_name": "Jack",
+            "last_name": "Name",
+            "age": 16,
+            "gender": "Male",
+            "phone": "987-654-3210"
         }
     ]
 }

@@ -312,3 +312,39 @@ def delete_user(email):
             return
 
     raise ValueError("User not found.")
+
+def get_grades(student_id):
+    """
+    Return the grades list for a specific student.
+
+    Parameters:
+        student_id (str): The student ID to search for.
+
+    Returns:
+        list: The grades list, or an empty list if none found.
+    """
+    data = load_database()
+    for student in data["students"]:
+        if student.get("student_id") == student_id:
+            return student.get("grades", [])
+    return []
+
+
+def save_grades(student_id, grades):
+    """
+    Save a grades list to a specific student's record.
+
+    Parameters:
+        student_id (str): The student ID to update.
+        grades (list): The grades list to save.
+
+    Raises:
+        ValueError: If the student is not found.
+    """
+    data = load_database()
+    for student in data["students"]:
+        if student.get("student_id") == student_id:
+            student["grades"] = grades
+            save_database(data)
+            return
+    raise ValueError("Student not found.")
